@@ -42,9 +42,9 @@ from collections import Counter
 
 
 # Download NLTK resources (run once)
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+#nltk.download('punkt')
+#nltk.download('stopwords')
+#nltk.download('wordnet')
 
 # Load the dataset
 feedback_data = pd.read_csv('student_feedback.csv')
@@ -60,6 +60,10 @@ def preprocess_text(text):
         tokens = word_tokenize(text)
         # Remove stopwords
         stop_words = set(stopwords.words('english'))
+        # Add custom words here
+        custom_blocks = ['allen', 'class', 'student', 'course', 'students',
+        'professor', 'jones', 'semester', 'dr']
+        stop_words.update(custom_blocks)
         filtered_tokens = [word for word in tokens if word not in stop_words]
         # Lemmatize
         lemmatizer = WordNetLemmatizer()
