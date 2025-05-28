@@ -23,7 +23,7 @@ Solution:
 """
 
 import pandas as pd
-import numpy as np
+#import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import nltk
@@ -122,6 +122,7 @@ feature_names = vectorizer.get_feature_names_out()
 lda = LatentDirichletAllocation(n_components=5, random_state=42)
 lda.fit(X)
 
+
 # Print top words for each topic
 def print_top_words(model, feature_names, n_top_words):
     topics = {}
@@ -131,6 +132,7 @@ def print_top_words(model, feature_names, n_top_words):
         print(f"Topic {topic_idx}:")
         print(" ".join(top_words))
     return topics
+
 
 topics = print_top_words(lda, feature_names, 10)
 
