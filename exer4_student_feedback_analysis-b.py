@@ -124,13 +124,14 @@ lda.fit(X)
 
 
 # Print top words for each topic
-def print_top_words(model, feature_names, n_top_words):
+def print_top_words(model, feature_names, n_top_words, category_name):
     topics = {}
+    print(f"\n---Keywords for topics identified in '{category_name}' feedback---")
     for topic_idx, topic in enumerate(model.components_):
         top_words = [feature_names[i] for i in topic.argsort()[:-n_top_words - 1:-1]]
-        topics[f"Topic {topic_idx}"] = top_words
-        print(f"Topic {topic_idx}:")
-        print(" ".join(top_words))
+        descriptive_topic_label = f" '{category_name}' - Topic {topic_idx}"
+        topics[descriptive_topic_label] = top_words
+        print(f" {descriptive_topic_label}: {' ' .join(top_words)}")
     return topics
 
 
