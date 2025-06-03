@@ -45,6 +45,29 @@ from collections import Counter
 #nltk.download('stopwords')
 #nltk.download('wordnet')
 
+# Preprocessing function
+def preprocess_text(text):
+    if isinstance(text, str):
+        # Convert to lowercase
+        text = text.lower()
+        # Remove special characters
+        text = re.sub(r'[^\w\s]', '', text)
+        # Tokenize
+        tokens = word_tokenize(text)
+        # Remove stopwords
+        stop_words = set(stopwords.words('english'))
+        # Add custom words here
+        custom_blocks = ['allen', 'class', 'student', 'course', 'students',
+        'professor', 'jones', 'semester', 'dr']
+        stop_words.update(custom_blocks)
+        filtered_tokens = [word for word in tokens if word not in stop_words]
+        # Lemmatize
+        lemmatizer = WordNetLemmatizer()
+        lemmatized_tokens = [lemmatizer.lemmatize(word) for word in filtered_tokens]
+        return ' '.join(lemmatized_tokens)
+    else:
+        return ''
+
 # Load the dataset and convert submission_date
 feedback_data = pd.read_csv('student_feedback.csv')
 feedback_data['submission_date'] = pd.to_datetime(feedback_data['submission_date'])
@@ -53,25 +76,20 @@ feedback_data['submission_date'] = pd.to_datetime(feedback_data['submission_date
 unique_categories = feedback_data['feedback_category'].unique()
 print(f"Found category titles: {unique_categories}")
 
-
-
-"""
-
-# --- This is where the main new structure begins ---
-# We'll store results for each category, maybe in a list or dictionary
-all_category_results = [] # Let's store our processed DataFrames here
+# Holder array for sub-dataframes tied to each of the unique_categories
+all_category_results = []
 
 for category_name in unique_categories:
     print(f"\n--- Processing category: {category_name} ---")
 
-    # 1. Filter data for the current category
-    # We use .copy() to ensure we're working with a new DataFrame slice
+    #1. Iterating through the 'feedback_category' column in feedback_data,
+    #creating a slice for each unique title, and copying the sub-dataframe
     category_specific_data = feedback_data[feedback_data['feedback_category'] == category_name].copy()
 
     # Check if there's any data for this category
     if category_specific_data.empty:
         print(f"No data found for category: {category_name}")
-        continue # Skip to the next category
+        continue
 
     # 2. Apply preprocessing to the 'feedback_text' of this specific category
     print("Preprocessing text...")
@@ -115,7 +133,7 @@ for category_name in unique_categories:
 # feedback_data['sentiment_category'] = pd.cut(...)
 # ... and the plots that rely on these global columns, will need to be adapted or removed.
 
-"""
+
 
 
 
